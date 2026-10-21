@@ -26,13 +26,35 @@ public class ManageDogsPanel extends javax.swing.JPanel {
         reload();
     }
     
-    private void reload() {
+    public void reload() {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) tableDogs.getModel();
-        model.setRowCount(0);
+        model.setRowCount(0);                                      // clear the table first
+
+        String filter = (String) cmbFilter.getSelectedItem();      // All, Available, Pending or Adopted
         java.util.ArrayList<Dog> results = repository.search(txtSearch.getText());
-        for(int i = 0; i < results.size(); i++) {
+        int shown = 0;                                             // count how many rows we add
+
+        for (int i = 0; i < results.size(); i++) {
             Dog d = results.get(i);
-            model.addRow(new Object[]{d.getId(), d.getName(), d.getBreed(), d.getAge(), d.getGender(), d.getSize(), d.getStatus(), d.getDateAdded()});
+
+            // Only add the dog if the filter is "All" or the status matches
+            if (filter.equals("All") || d.getStatus().equals(filter)) {
+                model.addRow(new Object[]{ d.getId(), d.getName(), d.getBreed(), d.getAge(),
+                        d.getGender(), d.getSize(), d.getStatus(), d.getDateAdded() });
+                shown++;
+            }
+        }
+
+        // Show a friendly message when nothing is shown
+        if (shown == 0) {
+            if (txtSearch.getText().trim().isEmpty() && filter.equals("All")) {
+                lblEmpty.setText("No dogs yet. Click + Add Dog to add your first one.");
+            } else {
+                lblEmpty.setText("No dogs match your search or filter.");
+            }
+            lblEmpty.setVisible(true);
+        } else {
+            lblEmpty.setVisible(false);
         }
     }
     
@@ -53,6 +75,8 @@ public class ManageDogsPanel extends javax.swing.JPanel {
         tableDogs = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        lblEmpty = new javax.swing.JLabel();
+        cmbFilter = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(244, 247, 242));
 
@@ -123,25 +147,39 @@ public class ManageDogsPanel extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(91, 107, 95));
         jLabel2.setText("Search, add, edit, or remove dog records");
 
+        lblEmpty.setFont(new java.awt.Font("sansserif", 0, 14)); // NOI18N
+        lblEmpty.setForeground(new java.awt.Color(91, 107, 95));
+        lblEmpty.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        cmbFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Available", "Pending", "Adopted" }));
+        cmbFilter.addActionListener(this::cmbFilterActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(121, 121, 121)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
-                        .addComponent(btnAddDog)
-                        .addGap(42, 42, 42)
-                        .addComponent(btnEdit)
-                        .addGap(37, 37, 37)
-                        .addComponent(btnDelete))
-                    .addComponent(jScrollPane1))
-                .addContainerGap(141, Short.MAX_VALUE))
+                        .addGap(121, 121, 121)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cmbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11)
+                                .addComponent(btnAddDog)
+                                .addGap(42, 42, 42)
+                                .addComponent(btnEdit)
+                                .addGap(37, 37, 37)
+                                .addComponent(btnDelete))
+                            .addComponent(jScrollPane1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(388, 388, 388)
+                        .addComponent(lblEmpty, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(313, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,10 +193,13 @@ public class ManageDogsPanel extends javax.swing.JPanel {
                     .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAddDog)
                     .addComponent(btnEdit)
-                    .addComponent(btnDelete))
+                    .addComponent(btnDelete)
+                    .addComponent(cmbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblEmpty, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -223,14 +264,20 @@ public class ManageDogsPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private void cmbFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFilterActionPerformed
+        reload();     // draw the table again using the new filter
+    }//GEN-LAST:event_cmbFilterActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddDog;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JComboBox<String> cmbFilter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblEmpty;
     private javax.swing.JTable tableDogs;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
