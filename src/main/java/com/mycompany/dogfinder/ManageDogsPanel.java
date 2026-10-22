@@ -77,8 +77,6 @@ public class ManageDogsPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         lblEmpty = new javax.swing.JLabel();
         cmbFilter = new javax.swing.JComboBox<>();
-        btnAdopt = new javax.swing.JButton();
-        btnExport = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(244, 247, 242));
 
@@ -156,10 +154,6 @@ public class ManageDogsPanel extends javax.swing.JPanel {
         cmbFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Available", "Pending", "Adopted" }));
         cmbFilter.addActionListener(this::cmbFilterActionPerformed);
 
-        btnAdopt.addActionListener(this::btnAdoptActionPerformed);
-
-        btnExport.addActionListener(this::btnExportActionPerformed);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -181,15 +175,11 @@ public class ManageDogsPanel extends javax.swing.JPanel {
                                 .addComponent(btnEdit)
                                 .addGap(37, 37, 37)
                                 .addComponent(btnDelete))
-                            .addComponent(jScrollPane1))
-                        .addGap(33, 33, 33)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnAdopt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane1)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(388, 388, 388)
                         .addComponent(lblEmpty, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(208, Short.MAX_VALUE))
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,12 +196,7 @@ public class ManageDogsPanel extends javax.swing.JPanel {
                     .addComponent(btnDelete)
                     .addComponent(cmbFilter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAdopt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(btnExport, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblEmpty, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
@@ -283,21 +268,11 @@ public class ManageDogsPanel extends javax.swing.JPanel {
         reload();     // draw the table again using the new filter
     }//GEN-LAST:event_cmbFilterActionPerformed
 
-    private void btnAdoptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdoptActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAdoptActionPerformed
-
-    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnExportActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddDog;
-    private javax.swing.JButton btnAdopt;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
-    private javax.swing.JButton btnExport;
     private javax.swing.JComboBox<String> cmbFilter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
